@@ -1,0 +1,888 @@
+{
+  "appName": "FloaPalette",
+  "version": 1,
+  "categories": [
+    {
+      "id": "text",
+      "label": "Text",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "text-date-heading",
+          "title": "日付メモ",
+          "command": "## yyyy-MM-dd メモ\n\n- ",
+          "description": "日付つきのメモ見出し",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "text-meeting-notes",
+          "title": "議事メモ",
+          "command": "## 議事メモ\n\n### 決まったこと\n- \n\n### 次にやること\n- \n\n### 保留\n- ",
+          "description": "会議・相談のメモ枠",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "text-bug-report",
+          "title": "不具合メモ",
+          "command": "## 不具合メモ\n\n### 症状\n\n### 期待する動き\n\n### 確認したこと\n\n### ログ\n```text\n\n```",
+          "description": "症状・期待・確認を書ける枠",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "prompt",
+      "label": "Prompt",
+      "color": "#b46cff",
+      "items": [
+        {
+          "id": "text-prompt-fix",
+          "title": "修正依頼プロンプト",
+          "command": "下記の問題を調査して、原因を特定したうえで修正してください。\n\n症状:\n\n期待する動き:\n\n確認してほしいこと:\n",
+          "description": "Codex等に修正を頼む時の型",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "text-prompt-review",
+          "title": "レビュー依頼",
+          "command": "この変更をレビューしてください。バグ、仕様漏れ、テスト不足を優先して指摘してください。",
+          "description": "コードレビューを頼む時の型",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "terminal",
+      "label": "Terminal",
+      "color": "#35c2a0",
+      "items": [
+        {
+          "id": "terminal-list",
+          "title": "一覧を見る",
+          "command": "Get-ChildItem",
+          "description": "PowerShellでファイル一覧",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "terminal-find-text",
+          "title": "文字列検索",
+          "command": "rg \"検索語\"",
+          "description": "rgで全文検索",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "terminal-port-5173",
+          "title": "5173のプロセス確認",
+          "command": "Get-NetTCPConnection -LocalPort 5173 | Select-Object LocalAddress,LocalPort,State,OwningProcess",
+          "description": "古いローカルサーバー確認",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "obsidian",
+      "label": "Obsidian",
+      "color": "#9f7aea",
+      "items": [
+        {
+          "id": "obsidian-wikilink",
+          "title": "Wikiリンク",
+          "command": "[[ノート名]]",
+          "description": "Obsidianのノートリンク",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "obsidian-embed",
+          "title": "ノート埋め込み",
+          "command": "![[ノート名]]",
+          "description": "別ノートや画像を埋め込む",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "obsidian-callout",
+          "title": "Callout",
+          "command": "> [!note]\n> ここに内容を書きます。",
+          "description": "Obsidianのコールアウト",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "html",
+      "label": "HTML",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "html-details",
+          "title": "details折りたたみ",
+          "command": "<details><summary>開く</summary>\n\n内容\n\n</details>",
+          "description": "HTMLの折りたたみ",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "html-span-color",
+          "title": "色付きspan",
+          "command": "<span style=\"color: red;\">文字</span>",
+          "description": "文字色を指定",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "symbols",
+      "label": "Symbols",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "symbol-arrow",
+          "title": "矢印セット",
+          "command": "→ ← ↑ ↓ => <= ",
+          "description": "よく使う矢印",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "symbol-check",
+          "title": "チェック記号",
+          "command": "OK / NG / TODO / NOTE / WARN",
+          "description": "チェック・警告・NG",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "git",
+      "label": "Git",
+      "color": "#f6c453",
+      "items": [
+        {
+          "id": "git-init",
+          "title": "git init",
+          "command": "git init",
+          "description": "Git管理を開始",
+          "favorite": false,
+          "autoEnter": true,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-status",
+          "title": "git status",
+          "command": "git status",
+          "description": "現在の変更状態を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-add-all",
+          "title": "git add .",
+          "command": "git add .",
+          "description": "全変更をステージに追加",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-add-a",
+          "title": "git add -A",
+          "command": "git add -A",
+          "description": "削除も含めて全変更を追加",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-add-file",
+          "title": "git add ファイル名",
+          "command": "git add ファイル名",
+          "description": "指定ファイルだけ追加",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-add-p",
+          "title": "git add -p",
+          "command": "git add -p",
+          "description": "差分の一部だけ追加",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-commit",
+          "title": "git commit -m",
+          "command": "git commit -m \"変更内容\"",
+          "description": "メッセージ付きコミット",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-commit-amend",
+          "title": "git commit --amend",
+          "command": "git commit --amend -m \"変更内容\"",
+          "description": "直前コミットを修正",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-diff",
+          "title": "git diff",
+          "command": "git diff",
+          "description": "未ステージの差分を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-diff-staged",
+          "title": "git diff --staged",
+          "command": "git diff --staged",
+          "description": "ステージ済み差分を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-log",
+          "title": "git log --oneline",
+          "command": "git log --oneline",
+          "description": "コミット履歴を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-log-graph",
+          "title": "履歴グラフ",
+          "command": "git log --oneline --graph --decorate --all",
+          "description": "枝分かれ込みで履歴を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-show",
+          "title": "git show",
+          "command": "git show コミットID",
+          "description": "コミットの中身を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-branch",
+          "title": "git branch",
+          "command": "git branch",
+          "description": "ブランチ一覧",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-switch",
+          "title": "git switch",
+          "command": "git switch ブランチ名",
+          "description": "ブランチ切り替え",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-switch-c",
+          "title": "git switch -c",
+          "command": "git switch -c ブランチ名",
+          "description": "新しいブランチ作成",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-checkout-b",
+          "title": "git checkout -b",
+          "command": "git checkout -b ブランチ名",
+          "description": "新しいブランチ作成",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-branch-m-main",
+          "title": "git branch -M main",
+          "command": "git branch -M main",
+          "description": "現在ブランチ名をmainへ変更",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-branch-master-main",
+          "title": "git branch -m master main",
+          "command": "git branch -m master main",
+          "description": "masterをmainへ変更",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-branch-delete",
+          "title": "git branch -d",
+          "command": "git branch -d ブランチ名",
+          "description": "マージ済みブランチ削除",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-branch-delete-force",
+          "title": "git branch -D",
+          "command": "git branch -D ブランチ名",
+          "description": "ブランチ強制削除",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-merge",
+          "title": "git merge",
+          "command": "git merge ブランチ名",
+          "description": "別ブランチを取り込む",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-rebase-main",
+          "title": "git rebase main",
+          "command": "git rebase main",
+          "description": "mainの後ろへ積み直す",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-cherry-pick",
+          "title": "git cherry-pick",
+          "command": "git cherry-pick コミットID",
+          "description": "特定コミットだけ取り込む",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-pull",
+          "title": "git pull",
+          "command": "git pull",
+          "description": "リモートから最新取得",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-pull-rebase",
+          "title": "git pull --rebase",
+          "command": "git pull --rebase",
+          "description": "履歴を直線にして取得",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-pull-unrelated",
+          "title": "unrelated histories pull",
+          "command": "git pull origin main --allow-unrelated-histories",
+          "description": "別履歴mainを取り込む",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-fetch",
+          "title": "git fetch",
+          "command": "git fetch",
+          "description": "リモート情報だけ取得",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-fetch-prune",
+          "title": "git fetch --all --prune",
+          "command": "git fetch --all --prune",
+          "description": "消えたリモート追跡も整理",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-push",
+          "title": "git push",
+          "command": "git push",
+          "description": "コミットをリモートへ送信",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-push-u",
+          "title": "git push -u origin main",
+          "command": "git push -u origin main",
+          "description": "初回プッシュ",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-push-origin-branch",
+          "title": "git push origin ブランチ名",
+          "command": "git push origin ブランチ名",
+          "description": "指定ブランチを送信",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-push-u-branch",
+          "title": "git push -u origin ブランチ名",
+          "command": "git push -u origin ブランチ名",
+          "description": "指定ブランチを初回送信",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-remote-v",
+          "title": "git remote -v",
+          "command": "git remote -v",
+          "description": "リモートURL確認",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-remote-add-origin",
+          "title": "git remote add origin",
+          "command": "git remote add origin URL",
+          "description": "originを追加",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-remote-set-url",
+          "title": "git remote set-url origin",
+          "command": "git remote set-url origin URL",
+          "description": "origin URL変更",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-restore-file",
+          "title": "git restore ファイル名",
+          "command": "git restore ファイル名",
+          "description": "未ステージ変更を戻す",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-restore-staged",
+          "title": "git restore --staged",
+          "command": "git restore --staged ファイル名",
+          "description": "ステージから外す",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-stash",
+          "title": "git stash",
+          "command": "git stash",
+          "description": "作業を一時退避",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-stash-pop",
+          "title": "git stash pop",
+          "command": "git stash pop",
+          "description": "退避作業を戻す",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-reset-soft",
+          "title": "git reset --soft HEAD~1",
+          "command": "git reset --soft HEAD~1",
+          "description": "直前コミットだけ取り消す",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-tag-list",
+          "title": "git tag",
+          "command": "git tag",
+          "description": "タグ一覧",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-tag-create",
+          "title": "git tag タグ名",
+          "command": "git tag タグ名",
+          "description": "タグを作る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "markdown",
+      "label": "Markdown",
+      "color": "#b46cff",
+      "items": [
+        {
+          "id": "md-preview-side",
+          "title": "サイドバイサイドプレビュー",
+          "command": "Ctrl+K V / Cmd+K V",
+          "description": "プレビューを横に開くショートカット(VScode)",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "shortcut"
+        },
+        {
+          "id": "md-preview",
+          "title": "プレビューを開く",
+          "command": "Ctrl+Shift+V / Cmd+Shift+V",
+          "description": "Markdownプレビューを開くショートカット",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "shortcut"
+        },
+        {
+          "id": "md-heading-1",
+          "title": "見出し1を書く",
+          "command": "# 見出し1",
+          "description": "見出し1の記法",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-heading-2",
+          "title": "見出し2を書く",
+          "command": "## 見出し2",
+          "description": "見出し2の記法",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-heading-3",
+          "title": "見出し3を書く",
+          "command": "### 見出し3",
+          "description": "見出し3の記法",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-list",
+          "title": "リストを書く",
+          "command": "- 箇条書き\n1. 番号付き\n- [ ] チェック\n- [x] 完了",
+          "description": "箇条書き・番号付き・チェックリスト",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-code-inline",
+          "title": "文中コードを書く",
+          "command": "`コード`",
+          "description": "文の途中にコード風の文字を入れる",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-code-block",
+          "title": "コードブロックを書く",
+          "command": "```言語名\nコード\n```",
+          "description": "複数行のコードブロック",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-link-image",
+          "title": "リンク・画像を書く",
+          "command": "[リンク文字](https://example.com)\n![代替テキスト](image.png)",
+          "description": "リンクと画像の基本記法",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-quote-table",
+          "title": "引用・表を書く",
+          "command": "> 引用文\n\n| 項目 | 内容 |\n|---|---|\n| A | B |",
+          "description": "引用とテーブルの記法",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-color",
+          "title": "文字色を付ける",
+          "command": "<span style=\"color: red;\">赤い文字</span>",
+          "description": "HTML対応プレビューで文字色を指定",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-bold-italic-strike",
+          "title": "文字を強調する",
+          "command": "**太字**\n*斜体*\n~~取り消し線~~",
+          "description": "太字・斜体・取り消し線",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-details",
+          "title": "折りたたみを書く",
+          "command": "<details><summary>ここをクリックして開く</summary>\n\n折りたたみの中身を書きます。\n\n</details>",
+          "description": "長い補足やコードを折りたたむ",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-note-info",
+          "title": "補足 note",
+          "command": ":::note info\n補足説明を書きます。\n:::",
+          "description": "Qiita向けの補足ボックス",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-note-warn-alert",
+          "title": "注意・警告 note",
+          "command": ":::note warn\n注意点を書きます。\n:::\n\n:::note alert\n強い警告を書きます。\n:::",
+          "description": "注意や警告を強調表示",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-horizontal-rule",
+          "title": "水平線を入れる",
+          "command": "\n---\n",
+          "description": "区切り線を挿入",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-link-title",
+          "title": "タイトル付きリンク",
+          "command": "[リンクテキスト](https://example.com \"タイトル\")",
+          "description": "ホバー説明付きリンク",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-reference-link",
+          "title": "参照リンク",
+          "command": "[ここ][link-1] と [この][link-1] リンクは同じです。\n\n[link-1]: https://example.com",
+          "description": "同じURLを複数箇所で使う",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-anchor-link",
+          "title": "ページ内リンク",
+          "command": "[見出しへジャンプ](#見出し名)",
+          "description": "同じページの見出しへ移動",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-image-title-size",
+          "title": "画像タイトル・サイズ",
+          "command": "![代替テキスト](image.png \"画像タイトル\")\n\n<img width=\"320\" src=\"image.png\" alt=\"代替テキスト\">",
+          "description": "画像にタイトルや幅指定を付ける",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-table-align",
+          "title": "整列表",
+          "command": "| 左寄せ | 右寄せ | 中央 |\n|:---|---:|:---:|\n| A | B | C |",
+          "description": "左・右・中央寄せの表",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-description-list",
+          "title": "説明リスト",
+          "command": "<dl>\n  <dt>用語</dt>\n  <dd>説明を書きます</dd>\n</dl>",
+          "description": "用語と説明を並べる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-math-block",
+          "title": "数式ブロック",
+          "command": "```math\nx^2 + y^2 = 1\n```",
+          "description": "LaTeX形式の数式をブロック表示",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-math-inline",
+          "title": "文中数式",
+          "command": "$`x^2 + y^2 = 1`$",
+          "description": "文章の途中に数式を入れる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-footnote",
+          "title": "脚注",
+          "command": "本文に脚注を付けます[^note]\n\n[^note]: 脚注の内容を書きます。",
+          "description": "注釈を本文下にまとめる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-mermaid",
+          "title": "Mermaid図",
+          "command": "```mermaid\nflowchart TD\n  A[開始] --> B[処理]\n  B --> C[完了]\n```",
+          "description": "フローチャートなどの図を挿入",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-plantuml",
+          "title": "PlantUML図",
+          "command": "```plantuml\nBob -> Alice : Hello!\n```",
+          "description": "PlantUMLの図を挿入",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-link-card",
+          "title": "リンクカード",
+          "command": "\nhttps://example.com\n",
+          "description": "URL単独行でカード表示",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-escape",
+          "title": "記法を無効化",
+          "command": "\\# 見出しにしない\n\\* 強調やリストにしない",
+          "description": "Markdownとして解釈させない",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "3f3c2f18-b4fa-48f0-bafd-bad2e64d4c22",
+          "title": "kkk",
+          "command": "kkk",
+          "description": "",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "7d69b4b3-4969-4e18-903b-f576eec3a58a",
+          "title": "jjj",
+          "command": "jjj",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "6087f123-8286-4b4f-9993-b9cfabc7834c",
+      "label": "Hermes",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "900ec6c8-9c91-45da-a8bf-779e781f76f3",
+          "title": "wslに移動",
+          "command": "wsl",
+          "description": "wslに移動",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "a710499f-ba9a-405f-94d1-a0426f185860",
+          "title": "hermes起動",
+          "command": "hermes",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    }
+  ]
+}
