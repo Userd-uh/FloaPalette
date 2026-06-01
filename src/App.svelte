@@ -8,6 +8,19 @@
 
   type TauriWindow = ReturnType<typeof getCurrentWindow>;
   type EditorMode = "command" | "category" | null;
+  type ReorderKind = "category" | "command";
+  type ReorderDrag = {
+    kind: ReorderKind;
+    id: string;
+    startX: number;
+    startY: number;
+    moved: boolean;
+    pointerId: number;
+    element: HTMLElement;
+    offsetX: number;
+    offsetY: number;
+  };
+  type ReorderPlacement = "before" | "after";
 
   let appData: AppData = {
     appName: "FloaPalette",
@@ -30,7 +43,24 @@
   let dataFilePath = "";
   let appWindow: TauriWindow | null = null;
   let categoryNameInput: HTMLInputElement | null = null;
+  let reorderKind: ReorderKind | "" = "";
+  let reorderSourceId = "";
+  let reorderTargetId = "";
+  let reorderPlacement: ReorderPlacement = "before";
+  let reorderDrag: ReorderDrag | null = null;
+  let reorderPreviewKind: ReorderKind | "" = "";
+  let reorderPreviewTitle = "";
+  let reorderPreviewSubtitle = "";
+  let reorderPreviewAccent = "#6bc7ff";
+  let reorderPreviewVisible = false;
+  let reorderPreviewX = 0;
+  let reorderPreviewY = 0;
+  let reorderPreviewWidth = 0;
+  let reorderPreviewHeight = 0;
+  let suppressNextClick = false;
 
+  const dragMoveThreshold = 6;
+  const interactiveSelector = "button, input, textarea, select, a, [data-no-reorder]";
   const isTauri = () => typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 
   const cloneData = (data: AppData): AppData => JSON.parse(JSON.stringify(data));
@@ -50,6 +80,24 @@
 
   const itemInputMode = (item: CommandItem) =>
     item.inputMode ?? (looksLikeShortcut(item.command) ? "shortcut" : "text");
+
+  const moveInArray = <T extends { id: string }>(
+    values: T[],
+    sourceId: string,
+    targetId: string,
+    placement: ReorderPlacement
+  ) => {
+    if (sourceId === targetId) return values;
+    const sourceIndex = values.findIndex((value) => value.id === sourceId);
+    const targetIndex = values.findIndex((value) => value.id === targetId);
+    if (sourceIndex < 0 || targetIndex < 0) return values;
+
+    const next = [...values];
+    const [moved] = next.splice(sourceIndex, 1);
+    const targetIndexAfterRemoval = next.findIndex((value) => value.id === targetId);
+    next.splice(placement === "after" ? targetIndexAfterRemoval + 1 : targetIndexAfterRemoval, 0, moved);
+    return next;
+  };
 
   const normalizeData = (data: AppData): AppData => ({
     ...data,
@@ -203,6 +251,178 @@
     categoryNameInput?.select();
   };
 
+  const canDragCommands = () => search.trim().length === 0;
+
+  const isReordering = (kind: ReorderKind, id: string) =>
+    reorderKind === kind && reorderSourceId === id;
+
+  const isReorderTarget = (kind: ReorderKind, id: string) =>
+    reorderKind === kind && reorderTargetId === id && reorderSourceId !== id;
+
+  const isReorderTargetBefore = (kind: ReorderKind, id: string) =>
+    isReorderTarget(kind, id) && reorderPlacement === "before";
+
+  const isReorderTargetAfter = (kind: ReorderKind, id: string) =>
+    isReorderTarget(kind, id) && reorderPlacement === "after";
+
+  const setReorderPreviewContent = (kind: ReorderKind, id: string) => {
+    reorderPreviewKind = kind;
+    if (kind === "category") {
+      const category = appData.categories.find((value) => value.id === id);
+      reorderPreviewTitle = category?.label ?? "";
+      reorderPreviewSubtitle = category ? `${category.items.length} コマンド` : "";
+      reorderPreviewAccent = category?.color ?? "#6bc7ff";
+      return;
+    }
+
+    const category = selectedCategory;
+    const item = category?.items.find((value) => value.id === id);
+    reorderPreviewTitle = item?.title ?? "";
+    reorderPreviewSubtitle = item?.description || item?.command || "";
+    reorderPreviewAccent = category?.color ?? "#6bc7ff";
+  };
+
+  const clearReorderPreview = () => {
+    reorderPreviewKind = "";
+    reorderPreviewTitle = "";
+    reorderPreviewSubtitle = "";
+    reorderPreviewAccent = "#6bc7ff";
+    reorderPreviewVisible = false;
+    reorderPreviewX = 0;
+    reorderPreviewY = 0;
+    reorderPreviewWidth = 0;
+    reorderPreviewHeight = 0;
+  };
+
+  const clearReorder = () => {
+    if (reorderDrag?.element.hasPointerCapture(reorderDrag.pointerId)) {
+      reorderDrag.element.releasePointerCapture(reorderDrag.pointerId);
+    }
+    reorderKind = "";
+    reorderSourceId = "";
+    reorderTargetId = "";
+    reorderPlacement = "before";
+    reorderDrag = null;
+    clearReorderPreview();
+    window.removeEventListener("pointermove", handleReorderPointerMove);
+    window.removeEventListener("pointerup", handleReorderPointerUp);
+    window.removeEventListener("pointercancel", handleReorderPointerCancel);
+  };
+
+  const suppressClickAfterDrag = () => {
+    suppressNextClick = true;
+    window.setTimeout(() => {
+      suppressNextClick = false;
+    }, 0);
+  };
+
+  const startReorder = (event: PointerEvent, kind: ReorderKind, id: string) => {
+    if (event.button !== 0) return;
+    const target = event.target as HTMLElement;
+    if (target.closest(interactiveSelector)) return;
+    if (kind === "command" && !canDragCommands()) return;
+
+    event.preventDefault();
+    const element = event.currentTarget as HTMLElement;
+    const rect = element.getBoundingClientRect();
+    element.setPointerCapture(event.pointerId);
+    reorderKind = kind;
+    reorderSourceId = id;
+    reorderTargetId = id;
+    reorderPlacement = "before";
+    setReorderPreviewContent(kind, id);
+    reorderPreviewX = rect.left;
+    reorderPreviewY = rect.top;
+    reorderPreviewWidth = rect.width;
+    reorderPreviewHeight = rect.height;
+    reorderDrag = {
+      kind,
+      id,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: false,
+      pointerId: event.pointerId,
+      element,
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top
+    };
+    status = `並び替え開始: ${kind}/${id}`;
+    window.addEventListener("pointermove", handleReorderPointerMove);
+    window.addEventListener("pointerup", handleReorderPointerUp);
+    window.addEventListener("pointercancel", handleReorderPointerCancel);
+  };
+
+  const handleReorderPointerMove = (event: PointerEvent) => {
+    if (!reorderDrag) return;
+    const distance = Math.hypot(event.clientX - reorderDrag.startX, event.clientY - reorderDrag.startY);
+    if (!reorderDrag.moved && distance < dragMoveThreshold) return;
+
+    reorderDrag = { ...reorderDrag, moved: true };
+    reorderPreviewVisible = true;
+    reorderPreviewX = event.clientX - reorderDrag.offsetX;
+    reorderPreviewY = event.clientY - reorderDrag.offsetY;
+    suppressNextClick = true;
+    event.preventDefault();
+
+    const element = document.elementFromPoint(event.clientX, event.clientY);
+    const target = element?.closest<HTMLElement>(`[data-reorder-kind="${reorderDrag.kind}"]`);
+    const targetId = target?.dataset.reorderId;
+    if (targetId) {
+      const rect = target.getBoundingClientRect();
+      reorderTargetId = targetId;
+      reorderPlacement =
+        reorderDrag.kind === "category"
+          ? event.clientX < rect.left + rect.width / 2
+            ? "before"
+            : "after"
+          : event.clientY < rect.top + rect.height / 2
+            ? "before"
+            : "after";
+      status = `移動先: ${targetId} ${reorderPlacement}`;
+    }
+  };
+
+  const handleReorderPointerUp = () => {
+    void finishReorder();
+  };
+
+  const handleReorderPointerCancel = () => {
+    const wasMoved = reorderDrag?.moved ?? false;
+    clearReorder();
+    if (wasMoved) suppressClickAfterDrag();
+  };
+
+  const finishReorder = async () => {
+    const drag = reorderDrag;
+    const targetId = reorderTargetId;
+    const placement = reorderPlacement;
+    clearReorder();
+
+    if (!drag?.moved) return;
+    suppressClickAfterDrag();
+    if (!targetId || targetId === drag.id) return;
+
+    if (drag.kind === "category") {
+      appData = {
+        ...appData,
+        categories: moveInArray(appData.categories, drag.id, targetId, placement)
+      };
+    } else {
+      if (!selectedCategory || !canDragCommands()) return;
+      appData = {
+        ...appData,
+        categories: appData.categories.map((category) =>
+          category.id === selectedCategoryId
+            ? { ...category, items: moveInArray(category.items, drag.id, targetId, placement) }
+            : category
+        )
+      };
+    }
+    refreshSelection();
+    await save();
+    status = "並び替え保存済み";
+  };
+
   const addCategory = async () => {
     const cat: Category = {
       id: crypto.randomUUID(),
@@ -221,19 +441,6 @@
   const addItem = () => {
     if (!selectedCategory) return;
     openCommandEditor(emptyItem(), "add");
-  };
-
-  const toggleEditor = () => {
-    if (editorMode === "command") {
-      editorMode = null;
-      draftItem = null;
-      return;
-    }
-    if (selectedItem) {
-      openCommandEditor(selectedItem);
-    } else if (selectedCategory) {
-      openCommandEditor(emptyItem(), "add");
-    }
   };
 
   const applyDraft = async () => {
@@ -280,6 +487,7 @@
 
   const deleteItem = async () => {
     if (!selectedCategory || !selectedItem) return;
+    if (!confirm(`「${selectedItem.title || selectedItem.command}」を削除しますか？`)) return;
     selectedCategory.items = selectedCategory.items.filter((i) => i.id !== selectedItem?.id);
     selectedItemId = selectedCategory.items[0]?.id ?? "";
     appData = { ...appData, categories: [...appData.categories] };
@@ -291,6 +499,13 @@
 
   const deleteCategory = async () => {
     if (!selectedCategory) return;
+    if (
+      !confirm(
+        `カテゴリ「${selectedCategory.label}」を削除しますか？\nこのカテゴリ内のコマンドも削除されます。`
+      )
+    ) {
+      return;
+    }
     appData = {
       ...appData,
       categories: appData.categories.filter((c) => c.id !== selectedCategory?.id)
@@ -359,11 +574,6 @@
 
     <div class="actions">
       <input class="search" bind:value={search} placeholder="検索..." />
-      <button class="ghost" on:click={addCategory}>カテゴリ追加</button>
-      <button class="ghost" on:click={addItem} disabled={!selectedCategory}>コマンド追加</button>
-      <button class:selected={editorMode === "command"} class="ghost" on:click={toggleEditor}>
-        コマンド編集
-      </button>
       <div class="window-controls">
         <button class="window-button" title="最小化" aria-label="最小化" on:click={minimizeWindow}>
           -
@@ -385,26 +595,50 @@
 
   <main class="main">
     <section class="leftpane">
-      <div class="category-strip">
-        {#each appData.categories as cat}
-          <button
-            class:selected={cat.id === selectedCategoryId}
-            class="category"
-            style={`--accent:${cat.color}`}
-            on:click={() => chooseCategory(cat.id)}
-          >
-            {cat.label}
-          </button>
-        {/each}
+      <div class="categorybar">
+        <div class="category-strip">
+          {#each appData.categories as cat}
+            <div
+              class:selected={cat.id === selectedCategoryId}
+              class:dragging={isReordering("category", cat.id)}
+              class:drop-target={isReorderTarget("category", cat.id)}
+              class:drop-before={isReorderTargetBefore("category", cat.id)}
+              class:drop-after={isReorderTargetAfter("category", cat.id)}
+              class="category"
+              data-reorder-id={cat.id}
+              data-reorder-kind="category"
+              role="button"
+              tabindex="0"
+              style={`--accent:${cat.color}`}
+              title="ドラッグでカテゴリ順を変更"
+              on:click={() => {
+                if (!suppressNextClick) chooseCategory(cat.id);
+              }}
+              on:pointerdown={(event) => startReorder(event, "category", cat.id)}
+              on:keydown={(event) => {
+                if (event.key === "Enter" || event.key === " ") chooseCategory(cat.id);
+              }}
+            >
+              <span class="dragmark" aria-hidden="true">::</span>
+              <span>{cat.label}</span>
+            </div>
+          {/each}
+        </div>
+        <button class="mini category-add" on:click={addCategory}>カテゴリ追加</button>
       </div>
 
       <div class="listhead">
-        <div>
-          <div class="listtitle">{selectedCategory?.label ?? "カテゴリ未選択"}</div>
+        <div class="listmeta">
+          <div class="listtitle-row">
+            <div class="listtitle">{selectedCategory?.label ?? "カテゴリ未選択"}</div>
+            <button class="mini" on:click={openCategoryEditor} disabled={!selectedCategory}>
+              カテゴリ編集
+            </button>
+          </div>
           <div class="listhint">{items.length} コマンド</div>
         </div>
-        <button class="mini" on:click={openCategoryEditor} disabled={!selectedCategory}>
-          カテゴリ編集
+        <button class="mini command-add" on:click={addItem} disabled={!selectedCategory}>
+          コマンド追加
         </button>
       </div>
 
@@ -423,10 +657,21 @@
         {#each items as item}
           <div
             class:selected={item.id === selectedItemId}
+            class:dragging={isReordering("command", item.id)}
+            class:drop-target={isReorderTarget("command", item.id)}
+            class:drop-before={isReorderTargetBefore("command", item.id)}
+            class:drop-after={isReorderTargetAfter("command", item.id)}
             class="itemcard"
+            class:reorder-disabled={!canDragCommands()}
+            data-reorder-id={item.id}
+            data-reorder-kind="command"
             role="button"
             tabindex="0"
-            on:click={() => sendItem(item)}
+            title={canDragCommands() ? "ドラッグでコマンド順を変更" : "検索中は並び替えできません"}
+            on:click={() => {
+              if (!suppressNextClick) sendItem(item);
+            }}
+            on:pointerdown={(event) => startReorder(event, "command", item.id)}
             on:keydown={(event) => {
               if (event.key === "Enter" || event.key === " ") sendItem(item);
             }}
@@ -436,9 +681,12 @@
                 <div class="fieldlabel">タイトル</div>
                 <div class="itemtitle">{item.title}</div>
               </div>
-              {#if item.favorite}
-                <span class="fav">★</span>
-              {/if}
+              <div class="cardtop-actions">
+                {#if item.favorite}
+                  <span class="fav">★</span>
+                {/if}
+                <span class="dragmark" aria-hidden="true">::</span>
+              </div>
             </div>
             <div class="cardfield">
               <div class="fieldlabel">説明</div>
@@ -548,4 +796,19 @@
       </aside>
     {/if}
   </main>
+
+  {#if reorderPreviewVisible}
+    <div
+      class="drag-preview"
+      class:category-preview={reorderPreviewKind === "category"}
+      class:command-preview={reorderPreviewKind === "command"}
+      style={`--accent:${reorderPreviewAccent}; left:${reorderPreviewX}px; top:${reorderPreviewY}px; width:${reorderPreviewWidth}px; min-height:${Math.min(reorderPreviewHeight, 180)}px;`}
+      aria-hidden="true"
+    >
+      <div class="drag-preview-title">{reorderPreviewTitle}</div>
+      {#if reorderPreviewSubtitle}
+        <div class="drag-preview-subtitle">{reorderPreviewSubtitle}</div>
+      {/if}
+    </div>
+  {/if}
 </div>

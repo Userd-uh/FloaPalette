@@ -17,19 +17,19 @@
           "inputMode": "text"
         },
         {
-          "id": "text-meeting-notes",
-          "title": "議事メモ",
-          "command": "## 議事メモ\n\n### 決まったこと\n- \n\n### 次にやること\n- \n\n### 保留\n- ",
-          "description": "会議・相談のメモ枠",
+          "id": "text-bug-report",
+          "title": "不具合メモ",
+          "command": "## 不具合メモ\n\n### 症状\n\n### 期待する動き\n\n### 確認したこと\n\n### ログ\n```text\n\n```",
+          "description": "症状・期待・確認を書ける枠",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
         },
         {
-          "id": "text-bug-report",
-          "title": "不具合メモ",
-          "command": "## 不具合メモ\n\n### 症状\n\n### 期待する動き\n\n### 確認したこと\n\n### ログ\n```text\n\n```",
-          "description": "症状・期待・確認を書ける枠",
+          "id": "text-meeting-notes",
+          "title": "議事メモ",
+          "command": "## 議事メモ\n\n### 決まったこと\n- \n\n### 次にやること\n- \n\n### 保留\n- ",
+          "description": "会議・相談のメモ枠",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
@@ -173,6 +173,292 @@
           "title": "チェック記号",
           "command": "OK / NG / TODO / NOTE / WARN",
           "description": "チェック・警告・NG",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "markdown",
+      "label": "Markdown",
+      "color": "#b46cff",
+      "items": [
+        {
+          "id": "md-preview-side",
+          "title": "サイドバイサイドプレビュー",
+          "command": "Ctrl+K V / Cmd+K V",
+          "description": "プレビューを横に開くショートカット(VScode)",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "shortcut"
+        },
+        {
+          "id": "md-preview",
+          "title": "プレビューを開く",
+          "command": "Ctrl+Shift+V / Cmd+Shift+V",
+          "description": "Markdownプレビューを開くショートカット",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "shortcut"
+        },
+        {
+          "id": "md-heading-1",
+          "title": "見出し1を書く",
+          "command": "# 見出し1",
+          "description": "見出し1の記法",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-heading-2",
+          "title": "見出し2を書く",
+          "command": "## 見出し2",
+          "description": "見出し2の記法",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-heading-3",
+          "title": "見出し3を書く",
+          "command": "### 見出し3",
+          "description": "見出し3の記法",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-list",
+          "title": "リストを書く",
+          "command": "- 箇条書き\n1. 番号付き\n- [ ] チェック\n- [x] 完了",
+          "description": "箇条書き・番号付き・チェックリスト",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-code-inline",
+          "title": "文中コードを書く",
+          "command": "`コード`",
+          "description": "文の途中にコード風の文字を入れる",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-code-block",
+          "title": "コードブロックを書く",
+          "command": "```言語名\nコード\n```",
+          "description": "複数行のコードブロック",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-link-image",
+          "title": "リンク・画像を書く",
+          "command": "[リンク文字](https://example.com)\n![代替テキスト](image.png)",
+          "description": "リンクと画像の基本記法",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-quote-table",
+          "title": "引用・表を書く",
+          "command": "> 引用文\n\n| 項目 | 内容 |\n|---|---|\n| A | B |",
+          "description": "引用とテーブルの記法",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-color",
+          "title": "文字色を付ける",
+          "command": "<span style=\"color: red;\">赤い文字</span>",
+          "description": "HTML対応プレビューで文字色を指定",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-bold-italic-strike",
+          "title": "文字を強調する",
+          "command": "**太字**\n*斜体*\n~~取り消し線~~",
+          "description": "太字・斜体・取り消し線",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-details",
+          "title": "折りたたみを書く",
+          "command": "<details><summary>ここをクリックして開く</summary>\n\n折りたたみの中身を書きます。\n\n</details>",
+          "description": "長い補足やコードを折りたたむ",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-note-info",
+          "title": "補足 note",
+          "command": ":::note info\n補足説明を書きます。\n:::",
+          "description": "Qiita向けの補足ボックス",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-note-warn-alert",
+          "title": "注意・警告 note",
+          "command": ":::note warn\n注意点を書きます。\n:::\n\n:::note alert\n強い警告を書きます。\n:::",
+          "description": "注意や警告を強調表示",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-horizontal-rule",
+          "title": "水平線を入れる",
+          "command": "\n---\n",
+          "description": "区切り線を挿入",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-link-title",
+          "title": "タイトル付きリンク",
+          "command": "[リンクテキスト](https://example.com \"タイトル\")",
+          "description": "ホバー説明付きリンク",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-reference-link",
+          "title": "参照リンク",
+          "command": "[ここ][link-1] と [この][link-1] リンクは同じです。\n\n[link-1]: https://example.com",
+          "description": "同じURLを複数箇所で使う",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-anchor-link",
+          "title": "ページ内リンク",
+          "command": "[見出しへジャンプ](#見出し名)",
+          "description": "同じページの見出しへ移動",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-image-title-size",
+          "title": "画像タイトル・サイズ",
+          "command": "![代替テキスト](image.png \"画像タイトル\")\n\n<img width=\"320\" src=\"image.png\" alt=\"代替テキスト\">",
+          "description": "画像にタイトルや幅指定を付ける",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-table-align",
+          "title": "整列表",
+          "command": "| 左寄せ | 右寄せ | 中央 |\n|:---|---:|:---:|\n| A | B | C |",
+          "description": "左・右・中央寄せの表",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-description-list",
+          "title": "説明リスト",
+          "command": "<dl>\n  <dt>用語</dt>\n  <dd>説明を書きます</dd>\n</dl>",
+          "description": "用語と説明を並べる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-math-block",
+          "title": "数式ブロック",
+          "command": "```math\nx^2 + y^2 = 1\n```",
+          "description": "LaTeX形式の数式をブロック表示",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-math-inline",
+          "title": "文中数式",
+          "command": "$`x^2 + y^2 = 1`$",
+          "description": "文章の途中に数式を入れる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-footnote",
+          "title": "脚注",
+          "command": "本文に脚注を付けます[^note]\n\n[^note]: 脚注の内容を書きます。",
+          "description": "注釈を本文下にまとめる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-mermaid",
+          "title": "Mermaid図",
+          "command": "```mermaid\nflowchart TD\n  A[開始] --> B[処理]\n  B --> C[完了]\n```",
+          "description": "フローチャートなどの図を挿入",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-plantuml",
+          "title": "PlantUML図",
+          "command": "```plantuml\nBob -> Alice : Hello!\n```",
+          "description": "PlantUMLの図を挿入",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-link-card",
+          "title": "リンクカード",
+          "command": "\nhttps://example.com\n",
+          "description": "URL単独行でカード表示",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "md-escape",
+          "title": "記法を無効化",
+          "command": "\\# 見出しにしない\n\\* 強調やリストにしない",
+          "description": "Markdownとして解釈させない",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "3f3c2f18-b4fa-48f0-bafd-bad2e64d4c22",
+          "title": "kkk",
+          "command": "kkk",
+          "description": "",
+          "favorite": true,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "7d69b4b3-4969-4e18-903b-f576eec3a58a",
+          "title": "jjj",
+          "command": "jjj",
+          "description": "",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
@@ -570,289 +856,12 @@
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
-        }
-      ]
-    },
-    {
-      "id": "markdown",
-      "label": "Markdown",
-      "color": "#b46cff",
-      "items": [
-        {
-          "id": "md-preview-side",
-          "title": "サイドバイサイドプレビュー",
-          "command": "Ctrl+K V / Cmd+K V",
-          "description": "プレビューを横に開くショートカット(VScode)",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "shortcut"
         },
         {
-          "id": "md-preview",
-          "title": "プレビューを開く",
-          "command": "Ctrl+Shift+V / Cmd+Shift+V",
-          "description": "Markdownプレビューを開くショートカット",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "shortcut"
-        },
-        {
-          "id": "md-heading-1",
-          "title": "見出し1を書く",
-          "command": "# 見出し1",
-          "description": "見出し1の記法",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-heading-2",
-          "title": "見出し2を書く",
-          "command": "## 見出し2",
-          "description": "見出し2の記法",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-heading-3",
-          "title": "見出し3を書く",
-          "command": "### 見出し3",
-          "description": "見出し3の記法",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-list",
-          "title": "リストを書く",
-          "command": "- 箇条書き\n1. 番号付き\n- [ ] チェック\n- [x] 完了",
-          "description": "箇条書き・番号付き・チェックリスト",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-code-inline",
-          "title": "文中コードを書く",
-          "command": "`コード`",
-          "description": "文の途中にコード風の文字を入れる",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-code-block",
-          "title": "コードブロックを書く",
-          "command": "```言語名\nコード\n```",
-          "description": "複数行のコードブロック",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-link-image",
-          "title": "リンク・画像を書く",
-          "command": "[リンク文字](https://example.com)\n![代替テキスト](image.png)",
-          "description": "リンクと画像の基本記法",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-quote-table",
-          "title": "引用・表を書く",
-          "command": "> 引用文\n\n| 項目 | 内容 |\n|---|---|\n| A | B |",
-          "description": "引用とテーブルの記法",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-color",
-          "title": "文字色を付ける",
-          "command": "<span style=\"color: red;\">赤い文字</span>",
-          "description": "HTML対応プレビューで文字色を指定",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-bold-italic-strike",
-          "title": "文字を強調する",
-          "command": "**太字**\n*斜体*\n~~取り消し線~~",
-          "description": "太字・斜体・取り消し線",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-details",
-          "title": "折りたたみを書く",
-          "command": "<details><summary>ここをクリックして開く</summary>\n\n折りたたみの中身を書きます。\n\n</details>",
-          "description": "長い補足やコードを折りたたむ",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-note-info",
-          "title": "補足 note",
-          "command": ":::note info\n補足説明を書きます。\n:::",
-          "description": "Qiita向けの補足ボックス",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-note-warn-alert",
-          "title": "注意・警告 note",
-          "command": ":::note warn\n注意点を書きます。\n:::\n\n:::note alert\n強い警告を書きます。\n:::",
-          "description": "注意や警告を強調表示",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-horizontal-rule",
-          "title": "水平線を入れる",
-          "command": "\n---\n",
-          "description": "区切り線を挿入",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-link-title",
-          "title": "タイトル付きリンク",
-          "command": "[リンクテキスト](https://example.com \"タイトル\")",
-          "description": "ホバー説明付きリンク",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-reference-link",
-          "title": "参照リンク",
-          "command": "[ここ][link-1] と [この][link-1] リンクは同じです。\n\n[link-1]: https://example.com",
-          "description": "同じURLを複数箇所で使う",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-anchor-link",
-          "title": "ページ内リンク",
-          "command": "[見出しへジャンプ](#見出し名)",
-          "description": "同じページの見出しへ移動",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-image-title-size",
-          "title": "画像タイトル・サイズ",
-          "command": "![代替テキスト](image.png \"画像タイトル\")\n\n<img width=\"320\" src=\"image.png\" alt=\"代替テキスト\">",
-          "description": "画像にタイトルや幅指定を付ける",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-table-align",
-          "title": "整列表",
-          "command": "| 左寄せ | 右寄せ | 中央 |\n|:---|---:|:---:|\n| A | B | C |",
-          "description": "左・右・中央寄せの表",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-description-list",
-          "title": "説明リスト",
-          "command": "<dl>\n  <dt>用語</dt>\n  <dd>説明を書きます</dd>\n</dl>",
-          "description": "用語と説明を並べる",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-math-block",
-          "title": "数式ブロック",
-          "command": "```math\nx^2 + y^2 = 1\n```",
-          "description": "LaTeX形式の数式をブロック表示",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-math-inline",
-          "title": "文中数式",
-          "command": "$`x^2 + y^2 = 1`$",
-          "description": "文章の途中に数式を入れる",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-footnote",
-          "title": "脚注",
-          "command": "本文に脚注を付けます[^note]\n\n[^note]: 脚注の内容を書きます。",
-          "description": "注釈を本文下にまとめる",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-mermaid",
-          "title": "Mermaid図",
-          "command": "```mermaid\nflowchart TD\n  A[開始] --> B[処理]\n  B --> C[完了]\n```",
-          "description": "フローチャートなどの図を挿入",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-plantuml",
-          "title": "PlantUML図",
-          "command": "```plantuml\nBob -> Alice : Hello!\n```",
-          "description": "PlantUMLの図を挿入",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-link-card",
-          "title": "リンクカード",
-          "command": "\nhttps://example.com\n",
-          "description": "URL単独行でカード表示",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "md-escape",
-          "title": "記法を無効化",
-          "command": "\\# 見出しにしない\n\\* 強調やリストにしない",
-          "description": "Markdownとして解釈させない",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "3f3c2f18-b4fa-48f0-bafd-bad2e64d4c22",
-          "title": "kkk",
-          "command": "kkk",
-          "description": "",
-          "favorite": true,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "7d69b4b3-4969-4e18-903b-f576eec3a58a",
-          "title": "jjj",
-          "command": "jjj",
-          "description": "",
+          "id": "67311224-8d4f-4813-a2ca-a61c8ead0f16",
+          "title": "現在のリンクリポジトリURLを調べる",
+          "command": "git remote -v",
+          "description": "現在のリンクリポジトリURLを調べる",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
@@ -878,6 +887,146 @@
           "title": "hermes起動",
           "command": "hermes",
           "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "47c41169-56fb-44b7-872f-66400c3678d8",
+          "title": "Gateway起動",
+          "command": "& \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\bash.exe\" -lc \"hermes gateway run\"",
+          "description": "diskode連携用にサーバーを起動、wsl起動していないとき",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "48bdc4ed-f164-492b-aa54-f9e1c04b47aa",
+          "title": "discode id登録",
+          "command": "& \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\bash.exe\" -lc \"printf '\\nDISCORD_ALLOWED_USERS=%s\\n' 'こににユーザーID（数字のもの）' >> ~/.hermes/.env\"",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "ad5bd9af-389a-4031-82ba-1ee03a2b651f",
+          "title": "discode　ID修正",
+          "command": "& \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\bash.exe\" -lc \"sed -i 's/^DISCORD_ALLOWED_USERS=.*/DISCORD_ALLOWED_USERS=ID入力（数字）/' ~/.hermes/.env\"",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "f3b1ae1d-9128-45e7-931a-b0feb6d0adf8",
+          "title": "BOTトークン登録",
+          "command": "& \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\bash.exe\" -lc \"printf '\\nDISCORD_BOT_TOKEN=%s\\n' 'BOTトークン' >> ~/.hermes/.env\"",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "4f7c647f-9bbf-4799-9f29-4371d2ac3223",
+          "title": "Gateway起動",
+          "command": "hermes gateway",
+          "description": "wslに遷移している状態で",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "f2915bc5-24ec-41d7-a8c1-0243b713e181",
+          "title": "hermesコンフィグ起動",
+          "command": "\\\\wsl.localhost\\Ubuntu\\home\\uh\\.hermes\\config.yaml",
+          "description": "CMD上で",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "5a45ba5f-da7a-48bc-9102-63bc2aa834b5",
+      "label": "llama",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "68b419de-9e09-4907-8431-0b8601a47dd4",
+          "title": "Available devices",
+          "command": ".\\llama-cli.exe --list-devices",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "36c7d830-e830-4fc6-a076-99cfb83e570e",
+      "label": "Ollama",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "1f93bdc1-3a0c-4667-9ccf-eaeac04fc97a",
+          "title": "使用可能モデル",
+          "command": "ollama list",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "afcf9bef-2cb9-43fa-a8f2-6a5bda0b939b",
+          "title": "モデル削除",
+          "command": "ollama rm モデル名",
+          "description": "モデル名は正しく記入。ollama listで出たモデル名を記入すればいい",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "6302601c-5378-47ac-94c7-13253ebcefc4",
+          "title": "モデルの中身確認",
+          "command": "ollama show モデル名",
+          "description": "モデル名は正しく記入する。ollama listで出たモデル名を記入すればいい",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "aee9bdd8-e37f-4576-9333-ce45011427e3",
+          "title": "modelfile作成",
+          "command": "ollama show --modelfile モデル名 > モデルファイル名",
+          "description": "モデルを作成するためのファイル作成。コマンド実行したディレクトリに作成される。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "eda0daf6-2039-461f-a63a-c7a81b6fc2d1",
+          "title": "モデルファイル作成",
+          "command": "ollama create 任意のモデル名 -f modelfile名",
+          "description": "modelfileに沿ったモデルを作成する。任意のモデル名に記載した名前のモデルが作成される。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "01588c5e-20c6-4908-9223-8c108517dab1",
+          "title": "モデル実行",
+          "command": "ollama run モデル名",
+          "description": "モデルを使用する。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "92796139-2bd1-4eb4-924f-b2ede722696f",
+          "title": "モデルのトークンスピード確認",
+          "command": "/set verbose",
+          "description": "モデル実行後に依頼する前に実行する。モデル回答後に評価が表示される。",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
