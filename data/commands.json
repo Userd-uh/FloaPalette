@@ -92,6 +92,51 @@
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
+        },
+        {
+          "id": "5f45c05a-06e3-46ad-8e6e-dfbab3c76f0b",
+          "title": "Python起動ID確認",
+          "command": "Get-CimInstance Win32_Process | Where-Object { $_.Name -match 'python' } |　Select-Object ProcessId, ParentProcessId, Name, CommandLine",
+          "description": "python 系プロセスの PID / 親PID / 実行コマンド が分かる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "45e96827-e06b-49b7-85a7-3fbbb8045c97",
+          "title": "起動しているサーバーの確認",
+          "command": "Get-NetTCPConnection -State Listen | Select-Object LocalAddress, LocalPort, @{Name=\"ProcessName\";Expression={(Get-Process -Id $_.OwningProcess).ProcessName}} | Format-Table -AutoSize",
+          "description": "ポートとサーバー名",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "72c8cc0e-a43a-46f9-8092-a3c9da368023",
+          "title": "起動しているサーバーの確認",
+          "command": "netstat -ano | findstr LISTENING",
+          "description": "PIDの確認",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "97394309-6a8b-4480-8b06-5163897ebc69",
+          "title": "サーバーの停止",
+          "command": "taskkill /F /PID 12345",
+          "description": "数字のところにPIDを入力する",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "1eca3d42-4a34-445d-bcec-0c5d2c495bb6",
+          "title": "codexのブラウザユーズのバグ解消",
+          "command": "powershell -ExecutionPolicy Bypass -File D:\\project\\Codex\\scripts\\Repair-CodexBundledPlugins.ps1",
+          "description": "ブラウザユーズが利用できないという表示がされているときに使用する。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
         }
       ]
     },
@@ -471,37 +516,10 @@
       "color": "#f6c453",
       "items": [
         {
-          "id": "git-init",
-          "title": "git init",
-          "command": "git init",
-          "description": "Git管理を開始",
-          "favorite": false,
-          "autoEnter": true,
-          "inputMode": "text"
-        },
-        {
-          "id": "git-status",
-          "title": "git status",
-          "command": "git status",
-          "description": "現在の変更状態を見る",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
           "id": "git-add-all",
           "title": "git add .",
           "command": "git add .",
           "description": "全変更をステージに追加",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "git-add-a",
-          "title": "git add -A",
-          "command": "git add -A",
-          "description": "削除も含めて全変更を追加",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
@@ -516,19 +534,73 @@
           "inputMode": "text"
         },
         {
-          "id": "git-add-p",
-          "title": "git add -p",
-          "command": "git add -p",
-          "description": "差分の一部だけ追加",
+          "id": "git-commit",
+          "title": "git commit -m",
+          "command": "git commit -m \"変更内容\"",
+          "description": "メッセージ付きコミット",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
         },
         {
-          "id": "git-commit",
-          "title": "git commit -m",
-          "command": "git commit -m \"変更内容\"",
-          "description": "メッセージ付きコミット",
+          "id": "git-push-u",
+          "title": "git push -u origin main",
+          "command": "git push -u origin main",
+          "description": "初回プッシュ",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-branch-master-main",
+          "title": "git branch -m master main",
+          "command": "git branch -m master main",
+          "description": "masterをmainへ変更",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "a6b2166c-4a8b-4cee-9d1a-0192a80b2ecd",
+          "title": "特定ファイルのみadd",
+          "command": "git add \"*.ex5\" \"*.mq5\" \"*.mqh\"",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-status",
+          "title": "git status",
+          "command": "git status",
+          "description": "現在の変更状態を見る",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-init",
+          "title": "git init",
+          "command": "git init",
+          "description": "Git管理を開始",
+          "favorite": false,
+          "autoEnter": true,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-add-a",
+          "title": "git add -A",
+          "command": "git add -A",
+          "description": "削除も含めて全変更を追加",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "git-add-p",
+          "title": "git add -p",
+          "command": "git add -p",
+          "description": "差分の一部だけ追加",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
@@ -633,15 +705,6 @@
           "inputMode": "text"
         },
         {
-          "id": "git-branch-master-main",
-          "title": "git branch -m master main",
-          "command": "git branch -m master main",
-          "description": "masterをmainへ変更",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
           "id": "git-branch-delete",
           "title": "git branch -d",
           "command": "git branch -d ブランチ名",
@@ -736,15 +799,6 @@
           "title": "git push",
           "command": "git push",
           "description": "コミットをリモートへ送信",
-          "favorite": false,
-          "autoEnter": false,
-          "inputMode": "text"
-        },
-        {
-          "id": "git-push-u",
-          "title": "git push -u origin main",
-          "command": "git push -u origin main",
-          "description": "初回プッシュ",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
@@ -944,6 +998,15 @@
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"
+        },
+        {
+          "id": "2cf1d557-5f99-4c0f-9288-a4f59ba7cb66",
+          "title": "llama.cpp設定",
+          "command": "llama-server.exe 起動中: PID 51376\nllama.cpp: D:\\Users\\heheh\\llama-cuda-13.1\nモデル: Qwen3.6-27B-UD-IQ3_XXS.gguf\nHermes 接続先: http://172.25.16.1:8080/v1\nHermes model: llama-cpp-qwen3.6-27b-iq3\ncontext: 64000",
+          "description": "llama.cppを使用する際の設定",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
         }
       ]
     },
@@ -956,6 +1019,60 @@
           "id": "68b419de-9e09-4907-8431-0b8601a47dd4",
           "title": "Available devices",
           "command": ".\\llama-cli.exe --list-devices",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "dc64f663-47bb-4f32-a9ed-db28208c7e06",
+          "title": "バージョン確認",
+          "command": ".\\llama-cli.exe --version",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "e9d93081-77bf-442d-9131-5c5d9a39206e",
+          "title": "サーバー起動の確認",
+          "command": "Invoke-RestMethod http://localhost:8080/models",
+          "description": "実際に起動しているかの確認、IDも確認できる",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "7b65cb80-d4ec-40b3-9284-a03cbec9a4e8",
+          "title": "サーバーの停止、アンロード",
+          "command": "Stop-Process -Name llama-server",
+          "description": "サーバーの停止、アンロード",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "3fc789c1-3974-47c9-813a-95e714edc901",
+          "title": "LocalPort確認",
+          "command": "Get-NetTCPConnection -State Listen |  Where-Object { (Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue).ProcessName -like \"llama-server*\" } |  Select-Object LocalAddress, LocalPort, OwningProcess",
+          "description": "どのポートで起動しているかを確認する。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "b6d9178c-4bba-42d6-897a-24d631e6ac86",
+          "title": "プロセスID（PID） を $llamaPid",
+          "command": "$llamaPid = (Get-NetTCPConnection -LocalPort 8080 -State Listen).OwningProcess",
+          "description": "8080番ポートで Listen 状態 になっているTCP接続を探して、そこを使っている プロセスID（PID） を $llamaPid に入れています。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "faae91f8-bf4f-4931-8cc0-d31e8106e499",
+          "title": "サーバー停止",
+          "command": "Get-Process -Id $llamaPid",
           "description": "",
           "favorite": false,
           "autoEnter": false,
@@ -1027,6 +1144,49 @@
           "title": "モデルのトークンスピード確認",
           "command": "/set verbose",
           "description": "モデル実行後に依頼する前に実行する。モデル回答後に評価が表示される。",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        }
+      ]
+    },
+    {
+      "id": "4d440b96-e8d5-4f8f-873b-0a84b7e8cdec",
+      "label": "llama studio",
+      "color": "#6bc7ff",
+      "items": [
+        {
+          "id": "49fbf3d9-c0d6-4386-b41e-2a5c2bf9c05e",
+          "title": "ID確認",
+          "command": "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'uvicorn|llama-studio|backend\\\\main' } | Select-Object ProcessId,CommandLine",
+          "description": "サーバー停止",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "a543a812-0e90-4704-a9c0-8dc39ddc4af0",
+          "title": "サーバー起動",
+          "command": "python -m uvicorn main:app --host 0.0.0.0 --port 7999",
+          "description": "",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "d5c2d3cd-51b9-41c1-b966-ebc312f1a716",
+          "title": "サーバー停止",
+          "command": "Stop-Process -Id 41112",
+          "description": "サーバー停止",
+          "favorite": false,
+          "autoEnter": false,
+          "inputMode": "text"
+        },
+        {
+          "id": "d541ea00-abbf-4f57-a3c8-dbd2ee5ae753",
+          "title": "virtual_keybord",
+          "command": "Get-CimInstance Win32_Process |  Where-Object { $_.CommandLine -match 'virtual_keyboard' } |  Select-Object ProcessId,ExecutablePath,CommandLine",
+          "description": "",
           "favorite": false,
           "autoEnter": false,
           "inputMode": "text"

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, tick } from "svelte";
+  import { onDestroy, onMount, tick } from "svelte";
   import { invoke } from "@tauri-apps/api/core";
   import { open } from "@tauri-apps/plugin-dialog";
   import { getCurrentWindow } from "@tauri-apps/api/window";
@@ -58,6 +58,10 @@
   let reorderPreviewWidth = 0;
   let reorderPreviewHeight = 0;
   let suppressNextClick = false;
+  let isWindowMaximized = false;
+  let hoveredCardId = "";
+  let expandCardUpward = false;
+  let unlistenWindowResized: (() => void) | null = null;
 
   const dragMoveThreshold = 6;
   const interactiveSelector = "button, input, textarea, select, a, [data-no-reorder]";
@@ -225,6 +229,15 @@
     await appWindow?.minimize();
   };
 
+  const syncMaximizedState = async () => {
+    isWindowMaximized = (await appWindow?.isMaximized()) ?? false;
+  };
+
+  const toggleWindowMaximize = async () => {
+    await appWindow?.toggleMaximize();
+    await syncMaximizedState();
+  };
+
   const closeWindow = async () => {
     if (isTauri()) {
       await invoke("exit_app");
@@ -253,17 +266,25 @@
 
   const canDragCommands = () => search.trim().length === 0;
 
-  const isReordering = (kind: ReorderKind, id: string) =>
-    reorderKind === kind && reorderSourceId === id;
+  const showFullCard = async (id: string, element: HTMLElement) => {
+    hoveredCardId = id;
+    expandCardUpward = false;
+    await tick();
 
-  const isReorderTarget = (kind: ReorderKind, id: string) =>
-    reorderKind === kind && reorderTargetId === id && reorderSourceId !== id;
+    const card = element.querySelector<HTMLElement>("[data-card-body]");
+    const list = element.closest<HTMLElement>(".list");
+    if (!card || !list) return;
 
-  const isReorderTargetBefore = (kind: ReorderKind, id: string) =>
-    isReorderTarget(kind, id) && reorderPlacement === "before";
+    const cardRect = card.getBoundingClientRect();
+    const listRect = list.getBoundingClientRect();
+    expandCardUpward = cardRect.bottom > listRect.bottom && cardRect.height <= listRect.height;
+  };
 
-  const isReorderTargetAfter = (kind: ReorderKind, id: string) =>
-    isReorderTarget(kind, id) && reorderPlacement === "after";
+  const hideFullCard = (id: string) => {
+    if (hoveredCardId !== id) return;
+    hoveredCardId = "";
+    expandCardUpward = false;
+  };
 
   const setReorderPreviewContent = (kind: ReorderKind, id: string) => {
     reorderPreviewKind = kind;
@@ -322,6 +343,9 @@
     if (target.closest(interactiveSelector)) return;
     if (kind === "command" && !canDragCommands()) return;
 
+    hoveredCardId = "";
+    expandCardUpward = false;
+
     event.preventDefault();
     const element = event.currentTarget as HTMLElement;
     const rect = element.getBoundingClientRect();
@@ -364,8 +388,25 @@
     suppressNextClick = true;
     event.preventDefault();
 
+    const selector = `[data-reorder-kind="${reorderDrag.kind}"]`;
     const element = document.elementFromPoint(event.clientX, event.clientY);
-    const target = element?.closest<HTMLElement>(`[data-reorder-kind="${reorderDrag.kind}"]`);
+    let target = element?.closest<HTMLElement>(selector) ?? null;
+
+    if (!target || target.dataset.reorderId === reorderDrag.id) {
+      const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
+        (candidate) => candidate.dataset.reorderId !== reorderDrag?.id
+      );
+      target =
+        candidates
+          .map((candidate) => {
+            const rect = candidate.getBoundingClientRect();
+            const dx = Math.max(rect.left - event.clientX, 0, event.clientX - rect.right);
+            const dy = Math.max(rect.top - event.clientY, 0, event.clientY - rect.bottom);
+            return { candidate, distance: Math.hypot(dx, dy) };
+          })
+          .sort((a, b) => a.distance - b.distance)[0]?.candidate ?? null;
+    }
+
     const targetId = target?.dataset.reorderId;
     if (targetId) {
       const rect = target.getBoundingClientRect();
@@ -375,9 +416,13 @@
           ? event.clientX < rect.left + rect.width / 2
             ? "before"
             : "after"
-          : event.clientY < rect.top + rect.height / 2
-            ? "before"
-            : "after";
+          : Math.abs(event.clientY - (rect.top + rect.height / 2)) < rect.height / 2
+            ? event.clientX < rect.left + rect.width / 2
+              ? "before"
+              : "after"
+            : event.clientY < rect.top + rect.height / 2
+              ? "before"
+              : "after";
       status = `移動先: ${targetId} ${reorderPlacement}`;
     }
   };
@@ -545,6 +590,10 @@
   onMount(async () => {
     if (isTauri()) {
       appWindow = getCurrentWindow();
+      await syncMaximizedState();
+      unlistenWindowResized = await appWindow.onResized(() => {
+        void syncMaximizedState();
+      });
       window.addEventListener("blur", () => {
         invoke("record_foreground_target_delayed").catch(() => undefined);
       });
@@ -556,6 +605,11 @@
     await appWindow?.setResizable(true);
     await appWindow?.setSkipTaskbar(false);
     status = "常駐準備完了";
+  });
+
+  onDestroy(() => {
+    unlistenWindowResized?.();
+    clearReorder();
   });
 
   $: refreshSelection();
@@ -578,6 +632,14 @@
         <button class="window-button" title="最小化" aria-label="最小化" on:click={minimizeWindow}>
           -
         </button>
+        <button
+          class="window-button maximize"
+          title={isWindowMaximized ? "元のサイズに戻す" : "最大化"}
+          aria-label={isWindowMaximized ? "元のサイズに戻す" : "最大化"}
+          on:click={toggleWindowMaximize}
+        >
+          {isWindowMaximized ? "❐" : "□"}
+        </button>
         <button class="window-button close" title="閉じる" aria-label="閉じる" on:click={closeWindow}>
           X
         </button>
@@ -598,12 +660,20 @@
       <div class="categorybar">
         <div class="category-strip">
           {#each appData.categories as cat}
+            {#if reorderKind === "category" && reorderTargetId === cat.id && reorderSourceId !== cat.id && reorderPlacement === "before"}
+              <div
+                class="category-placeholder"
+                style={`--placeholder-size:${Math.max(reorderPreviewWidth, 40)}px`}
+                aria-hidden="true"
+              ></div>
+            {/if}
             <div
               class:selected={cat.id === selectedCategoryId}
-              class:dragging={isReordering("category", cat.id)}
-              class:drop-target={isReorderTarget("category", cat.id)}
-              class:drop-before={isReorderTargetBefore("category", cat.id)}
-              class:drop-after={isReorderTargetAfter("category", cat.id)}
+              class:dragging={reorderKind === "category" && reorderSourceId === cat.id}
+              class:dragging-active={reorderKind === "category" && reorderSourceId === cat.id && (reorderDrag?.moved ?? false)}
+              class:drop-target={reorderKind === "category" && reorderTargetId === cat.id && reorderSourceId !== cat.id}
+              class:drop-before={reorderKind === "category" && reorderTargetId === cat.id && reorderSourceId !== cat.id && reorderPlacement === "before"}
+              class:drop-after={reorderKind === "category" && reorderTargetId === cat.id && reorderSourceId !== cat.id && reorderPlacement === "after"}
               class="category"
               data-reorder-id={cat.id}
               data-reorder-kind="category"
@@ -619,9 +689,15 @@
                 if (event.key === "Enter" || event.key === " ") chooseCategory(cat.id);
               }}
             >
-              <span class="dragmark" aria-hidden="true">::</span>
               <span>{cat.label}</span>
             </div>
+            {#if reorderKind === "category" && reorderTargetId === cat.id && reorderSourceId !== cat.id && reorderPlacement === "after"}
+              <div
+                class="category-placeholder"
+                style={`--placeholder-size:${Math.max(reorderPreviewWidth, 40)}px`}
+                aria-hidden="true"
+              ></div>
+            {/if}
           {/each}
         </div>
         <button class="mini category-add" on:click={addCategory}>カテゴリ追加</button>
@@ -655,13 +731,20 @@
           </div>
         {/if}
         {#each items as item}
+          {#if reorderKind === "command" && reorderTargetId === item.id && reorderSourceId !== item.id && reorderPlacement === "before"}
+            <div
+              class="card-placeholder"
+              style={`--placeholder-size:${Math.max(reorderPreviewHeight, 170)}px`}
+              aria-hidden="true"
+            ></div>
+          {/if}
           <div
             class:selected={item.id === selectedItemId}
-            class:dragging={isReordering("command", item.id)}
-            class:drop-target={isReorderTarget("command", item.id)}
-            class:drop-before={isReorderTargetBefore("command", item.id)}
-            class:drop-after={isReorderTargetAfter("command", item.id)}
-            class="itemcard"
+            class:dragging={reorderKind === "command" && reorderSourceId === item.id}
+            class:dragging-active={reorderKind === "command" && reorderSourceId === item.id && (reorderDrag?.moved ?? false)}
+            class:hovered={hoveredCardId === item.id}
+            class:expand-up={hoveredCardId === item.id && expandCardUpward}
+            class="itemcard-slot"
             class:reorder-disabled={!canDragCommands()}
             data-reorder-id={item.id}
             data-reorder-kind="command"
@@ -672,38 +755,51 @@
               if (!suppressNextClick) sendItem(item);
             }}
             on:pointerdown={(event) => startReorder(event, "command", item.id)}
+            on:pointerenter={(event) => void showFullCard(item.id, event.currentTarget as HTMLElement)}
+            on:pointerleave={() => hideFullCard(item.id)}
+            on:focusin={(event) => void showFullCard(item.id, event.currentTarget as HTMLElement)}
+            on:focusout={(event) => {
+              const slot = event.currentTarget as HTMLElement;
+              if (!slot.contains(event.relatedTarget as Node | null)) hideFullCard(item.id);
+            }}
             on:keydown={(event) => {
               if (event.key === "Enter" || event.key === " ") sendItem(item);
             }}
           >
-            <div class="cardtop">
-              <div>
-                <div class="fieldlabel">タイトル</div>
-                <div class="itemtitle">{item.title}</div>
+            <div class="itemcard" data-card-body>
+              <div class="cardtop">
+                <div class="cardtitle-block">
+                  <div class="fieldlabel">タイトル</div>
+                  <div class="itemtitle">{item.title}</div>
+                </div>
+                <div class="cardtop-actions">
+                  {#if item.favorite}
+                    <span class="fav">★</span>
+                  {/if}
+                  <button class="mini card-edit" on:click|stopPropagation={() => openCommandEditor(item)}>
+                    編集
+                  </button>
+                </div>
               </div>
-              <div class="cardtop-actions">
-                {#if item.favorite}
-                  <span class="fav">★</span>
-                {/if}
-                <span class="dragmark" aria-hidden="true">::</span>
+              <div class="cardfield">
+                <div class="fieldlabel">説明</div>
+                <div class="desc">{item.description}</div>
               </div>
-            </div>
-            <div class="cardfield">
-              <div class="fieldlabel">説明</div>
-              <div class="desc">{item.description}</div>
-            </div>
-            <div class="cardfield commandfield">
-              <div class="fieldlabel">
-                {itemInputMode(item) === "shortcut" ? "ショートカット" : "入力"}
+              <div class="cardfield commandfield">
+                <div class="fieldlabel">
+                  {itemInputMode(item) === "shortcut" ? "ショートカット" : "入力"}
+                </div>
+                <div class="command">{item.command}</div>
               </div>
-              <div class="command">{item.command}</div>
-            </div>
-            <div class="cardactions">
-              <button class="mini" on:click|stopPropagation={() => openCommandEditor(item)}>
-                編集
-              </button>
             </div>
           </div>
+          {#if reorderKind === "command" && reorderTargetId === item.id && reorderSourceId !== item.id && reorderPlacement === "after"}
+            <div
+              class="card-placeholder"
+              style={`--placeholder-size:${Math.max(reorderPreviewHeight, 170)}px`}
+              aria-hidden="true"
+            ></div>
+          {/if}
         {/each}
       </div>
     </section>
